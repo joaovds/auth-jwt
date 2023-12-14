@@ -8,9 +8,9 @@ type User struct {
 }
 
 type UserRepository interface {
-  GetAll() ([]*User, error)
+	GetAll() ([]*User, error)
 }
 
 type UserUseCases interface {
-  GetAll() ([]*User, error)
+	GetAll() ([]*User, error)
 }

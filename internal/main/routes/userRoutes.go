@@ -7,10 +7,10 @@ import (
 )
 
 func handleUserRoutes(router fiber.Router) {
-  userRouter := router.Group("/users")
+	userRouter := router.Group("/users")
 
-  userService := application.NewUserUseCases()
-  userHandler := handlers.NewUserHandler(userService)
+	userService := application.NewUserUseCases()
+	userHandler := handlers.NewUserHandler(userService)
 
-  userRouter.Get("/", userHandler.GetAll)
+	userRouter.Get("/", userHandler.GetAll)
 }

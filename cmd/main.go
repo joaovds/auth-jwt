@@ -1,16 +1,16 @@
 package main
 
 import (
-  "fmt"
-  "log"
+	"fmt"
+	"log"
 
-  "github.com/joaovds/auth-jwt/internal/main/config"
+	"github.com/joaovds/auth-jwt/internal/main/config"
 )
 
 func main() {
-  config.LoadEnv()
+	config.LoadEnv()
 
-  app := config.GetApp()
-  fmt.Println("Server running on port", config.ENV.Port)
-  log.Fatal(app.Listen(":" + config.ENV.Port))
+	app := config.GetApp()
+	fmt.Println("Server running on port", config.ENV.Port)
+	log.Fatal(app.Listen(":" + config.ENV.Port))
 }

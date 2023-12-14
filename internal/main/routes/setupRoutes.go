@@ -1,12 +1,11 @@
 package routes
 
-
 import (
-  "github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2"
 )
 
 func SetupRoutes(app *fiber.App) {
-  apiV1 := app.Group("/api/v1")
+	apiV1 := app.Group("/api/v1")
 
-  handleUserRoutes(apiV1)
+	handleUserRoutes(apiV1)
 }

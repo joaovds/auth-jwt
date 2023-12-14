@@ -6,9 +6,9 @@ import (
 )
 
 func GetApp() *fiber.App {
-  app := fiber.New()
+	app := fiber.New()
 
-  routes.SetupRoutes(app)
+	routes.SetupRoutes(app)
 
-  return app
+	return app
 }
