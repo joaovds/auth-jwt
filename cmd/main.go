@@ -9,6 +9,7 @@ import (
 
 func main() {
 	config.LoadEnv()
+  config.SetupDatabase()
 
 	app := config.GetApp()
 	fmt.Println("Server running on port", config.ENV.Port)

@@ -33,11 +33,5 @@ func SetupMongoDB(DBURI, DBName string) {
 			Client: client,
 			DB:     db,
 		}
-
-		defer func() {
-			if err = client.Disconnect(context.Background()); err != nil {
-				log.Panic("Error disconnecting from MongoDB: ", err)
-			}
-		}()
 	})
 }
