@@ -25,3 +25,12 @@ func (u *UserUseCases) GetAll() ([]*domain.User, error) {
 
 	return users, nil
 }
+
+func (u *UserUseCases) GetByID(id string) (*domain.User, error) {
+  user, err := u.UserRepository.GetByID(id)
+  if err != nil {
+    return nil, err
+  }
+
+  return user, nil
+}
