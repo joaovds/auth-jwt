@@ -1,10 +1,10 @@
 package main
 
 import (
-	"fmt"
-	"log"
+  "fmt"
+  "log"
 
-	"github.com/joaovds/auth-jwt/internal/main/config"
+  "github.com/joaovds/auth-jwt/internal/main/config"
 )
 
 func main() {
