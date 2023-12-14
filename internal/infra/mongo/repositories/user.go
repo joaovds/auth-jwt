@@ -26,7 +26,7 @@ func (ur *UserRepository) GetAll() ([]*domain.User, error) {
 	}
 	defer cursor.Close(context.TODO())
 
-  users := make([]*domain.User, 0)
+	users := make([]*domain.User, 0)
 	err = cursor.All(context.TODO(), &users)
 	if err != nil {
 		return nil, err
@@ -36,23 +36,60 @@ func (ur *UserRepository) GetAll() ([]*domain.User, error) {
 }
 
 func (ur *UserRepository) GetByID(id string) (*domain.User, error) {
-  usersCollection := database.Instance.DB.Collection("users")
+	usersCollection := database.Instance.DB.Collection("users")
 
-  idHex, err := primitive.ObjectIDFromHex(id)
-  if err != nil {
-    return nil, err
-  }
+	idHex, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return nil, err
+	}
 
-  user := &domain.User{}
-  err = usersCollection.FindOne(context.TODO(), bson.M{
-    "_id": idHex,
-  }).Decode(user)
-  if err != nil {
-    if err == mongo.ErrNoDocuments {
-      return nil, errors.New("user not found")
-    }
-    return nil, err
-  }
+	user := &domain.User{}
+	err = usersCollection.FindOne(context.TODO(), bson.M{
+		"_id": idHex,
+	}).Decode(user)
+	if err != nil {
+		if err == mongo.ErrNoDocuments {
+			return nil, errors.New("user not found")
+		}
+		return nil, err
+	}
 
-  return user, nil
+	return user, nil
+}
+
+func (ur *UserRepository) CheckEmailExists(email string) (bool, error) {
+	usersCollection := database.Instance.DB.Collection("users")
+
+	user := &domain.User{}
+	err := usersCollection.FindOne(context.TODO(), bson.M{
+		"email": email,
+	}).Decode(user)
+	if err != nil {
+		if err == mongo.ErrNoDocuments {
+			return false, nil
+		}
+		return false, err
+	}
+
+	return true, nil
+}
+
+func (ur *UserRepository) Create(user *domain.User) error {
+	if exists, err := ur.CheckEmailExists(user.Email); err != nil {
+		return err
+	} else if exists {
+		return errors.New("email already exists")
+	}
+
+	usersCollection := database.Instance.DB.Collection("users")
+	_, err := usersCollection.InsertOne(context.TODO(), bson.M{
+		"name":     user.Name,
+		"email":    user.Email,
+		"password": user.Password,
+	})
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

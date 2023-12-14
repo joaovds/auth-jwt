@@ -27,10 +27,19 @@ func (u *UserUseCases) GetAll() ([]*domain.User, error) {
 }
 
 func (u *UserUseCases) GetByID(id string) (*domain.User, error) {
-  user, err := u.UserRepository.GetByID(id)
+	user, err := u.UserRepository.GetByID(id)
+	if err != nil {
+		return nil, err
+	}
+
+	return user, nil
+}
+
+func (u *UserUseCases) Create(user *domain.User) error {
+  err := u.UserRepository.Create(user)
   if err != nil {
-    return nil, err
+    return err
   }
 
-  return user, nil
+  return nil
 }
