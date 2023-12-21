@@ -15,4 +15,5 @@ func handleUserRoutes(router fiber.Router) {
 	userRouter.Get("/", userHandler.GetAll)
 	userRouter.Get("/:id", userHandler.GetByID)
   userRouter.Post("/", userHandler.Create)
+  userRouter.Post("/login", userHandler.Login)
 }

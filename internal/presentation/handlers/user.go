@@ -12,6 +12,7 @@ type UserHandler interface {
 	GetAll(ctx *fiber.Ctx) error
 	GetByID(ctx *fiber.Ctx) error
   Create(ctx *fiber.Ctx) error
+  Login(ctx *fiber.Ctx) error
 }
 
 type handler struct {
@@ -82,4 +83,32 @@ func (h *handler) Create(ctx *fiber.Ctx) error {
     return ctx.Status(fiber.StatusInternalServerError).JSON(err.Error())
   }
   return ctx.Status(fiber.StatusCreated).JSON(nil)
+}
+
+func (h *handler) Login(ctx *fiber.Ctx) error {
+  credentials := new(struct { Email string `json:"email"`; Password string `json:"password"` })
+  err := ctx.BodyParser(credentials)
+  if err != nil {
+    println(err.Error())
+    return ctx.Status(fiber.StatusBadRequest).JSON("invalid body")
+  }
+
+  if credentials.Email == "" {
+    return ctx.Status(fiber.StatusBadRequest).JSON("email is required")
+  }
+
+  _, err = mail.ParseAddress(credentials.Email)
+  if err != nil {
+    return ctx.Status(fiber.StatusBadRequest).JSON("email is invalid")
+  }
+
+  if credentials.Password == "" {
+    return ctx.Status(fiber.StatusBadRequest).JSON("password is required")
+  }
+
+  // err = h.userService.Login(credentials)
+  // if err != nil {
+  //   return ctx.Status(fiber.StatusInternalServerError).JSON(err.Error())
+  // }
+  return ctx.Status(fiber.StatusOK).JSON(credentials)
 }
