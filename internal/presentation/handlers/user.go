@@ -106,9 +106,9 @@ func (h *handler) Login(ctx *fiber.Ctx) error {
     return ctx.Status(fiber.StatusBadRequest).JSON("password is required")
   }
 
-  // err = h.userService.Login(credentials)
-  // if err != nil {
-  //   return ctx.Status(fiber.StatusInternalServerError).JSON(err.Error())
-  // }
-  return ctx.Status(fiber.StatusOK).JSON(credentials)
+  token, err := h.userService.Login(credentials.Email, credentials.Password)
+  if err != nil {
+    return ctx.Status(fiber.StatusInternalServerError).JSON(err.Error())
+  }
+  return ctx.Status(fiber.StatusOK).JSON(token)
 }

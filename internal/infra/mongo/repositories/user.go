@@ -57,6 +57,23 @@ func (ur *UserRepository) GetByID(id string) (*domain.User, error) {
 	return user, nil
 }
 
+
+func (ur *UserRepository) GetByEmail(email string) (*domain.User, error) {
+	usersCollection := database.Instance.DB.Collection("users")
+
+	user := &domain.User{}
+  err := usersCollection.FindOne(context.TODO(), bson.M{
+		"email": email,
+	}).Decode(user)
+	if err != nil {
+		if err == mongo.ErrNoDocuments {
+			return nil, errors.New("user not found")
+		}
+		return nil, err
+	}
+
+	return user, nil
+}
 func (ur *UserRepository) CheckEmailExists(email string) (bool, error) {
 	usersCollection := database.Instance.DB.Collection("users")
 

@@ -21,7 +21,7 @@ func newEnv() *Env {
 		port = os.Getenv("PORT")
 	}
 
-	return &Env{
+  return &Env{
 		Port:   port,
 		DBName: os.Getenv("DBNAME"),
 		DBURI:  os.Getenv("DBURI"),
