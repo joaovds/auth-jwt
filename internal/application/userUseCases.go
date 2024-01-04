@@ -11,16 +11,16 @@ import (
 
 type UserUseCases struct {
 	UserRepository domain.UserRepository
-  Hasher domain.Cryptography
+  Crypt domain.Cryptography
 }
 
 func NewUserUseCases() *UserUseCases {
 	ur := repositories.NewUserRepository()
-  hasher := cryptography.NewCryptography()
+  crypt := cryptography.NewCryptography()
 
 	return &UserUseCases{
 		UserRepository: ur,
-    Hasher: hasher,
+    Crypt: crypt,
 	}
 }
 
@@ -49,7 +49,7 @@ func (u *UserUseCases) GetByID(id string) (*domain.User, error) {
 }
 
 func (u *UserUseCases) Create(user *domain.User) error {
-  passwordHash, err := u.Hasher.Hasher(user.Password)
+  passwordHash, err := u.Crypt.Hasher(user.Password)
   if err != nil {
     return err
   }
@@ -69,13 +69,13 @@ func (u *UserUseCases) Login(email, password string) (string, time.Time, error) 
     return "", time.Now(), err
   }
 
-  if !u.Hasher.HashComparer(password, user.Password) {
+  if !u.Crypt.HashComparer(password, user.Password) {
     return "", time.Now(), fmt.Errorf("invalid password")
   }
 
   expirationTime := time.Now().Add(5 * time.Minute) // 5 minutes
 
-  token, expirationTime, err := u.Hasher.Encrypt(user.ID, expirationTime)
+  token, expirationTime, err := u.Crypt.Encrypt(user.ID, expirationTime)
   if err != nil {
     return "", time.Now(), err
   }

@@ -20,6 +20,7 @@ type Cryptography interface {
   Hasher(plaintext string) (string, error)
   HashComparer(plaintext, hash string) bool
   Encrypt(plaintext string, expirationTime time.Time) (string, time.Time, error)
+  Decrypt(ciphertext string) (error)
 }
 
 type UserUseCases interface {

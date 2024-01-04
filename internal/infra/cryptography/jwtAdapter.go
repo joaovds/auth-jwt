@@ -37,3 +37,19 @@ func (j *JWTAdapter) Encrypt(plaintext string, expirationTime time.Time) (string
 
   return tokenString, expirationTime, nil
 }
+
+func (j *JWTAdapter) Decrypt(ciphertext string) (error) {
+  token, err := jwt.ParseWithClaims(ciphertext, &Claims{}, func(token *jwt.Token) (interface{}, error) {
+    return []byte(j.secret), nil
+  })
+  if err != nil {
+    return err
+  }
+
+  _, ok := token.Claims.(*Claims)
+  if !ok {
+    return err
+  }
+
+  return nil
+}

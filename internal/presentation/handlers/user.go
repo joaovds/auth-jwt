@@ -112,7 +112,7 @@ func (h *handler) Login(ctx *fiber.Ctx) error {
   }
 
   ctx.Cookie(&fiber.Cookie{
-    Name: "token",
+    Name: "Authentication",
     Value: token,
     Expires: expirationTime,
     HTTPOnly: true,

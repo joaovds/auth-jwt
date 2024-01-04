@@ -25,3 +25,7 @@ func (c *Cryptography) HashComparer(plaintext, hash string) bool {
 func (c *Cryptography) Encrypt(plaintext string, expirationTime time.Time) (string, time.Time, error) {
   return c.jwtAdapter.Encrypt(plaintext, expirationTime)
 }
+
+func (c *Cryptography) Decrypt(ciphertext string) (error) {
+  return c.jwtAdapter.Decrypt(ciphertext)
+}
