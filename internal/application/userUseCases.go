@@ -15,7 +15,7 @@ type UserUseCases struct {
 
 func NewUserUseCases() *UserUseCases {
 	ur := repositories.NewUserRepository()
-  hasher := cryptography.NewBcrypt(14)
+  hasher := cryptography.NewCryptography()
 
 	return &UserUseCases{
 		UserRepository: ur,
@@ -72,5 +72,10 @@ func (u *UserUseCases) Login(email, password string) (string ,error) {
     return "", fmt.Errorf("invalid password")
   }
 
-  return "token", nil
+  token, err := u.Hasher.Encrypt(user.ID)
+  if err != nil {
+    return "", err
+  }
+
+  return token, nil
 }

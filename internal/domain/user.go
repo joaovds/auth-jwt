@@ -17,6 +17,7 @@ type UserRepository interface {
 type Cryptography interface {
   Hasher(plaintext string) (string, error)
   HashComparer(plaintext, hash string) bool
+  Encrypt(plaintext string) (string, error)
 }
 
 type UserUseCases interface {
