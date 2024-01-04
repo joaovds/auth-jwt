@@ -1,5 +1,7 @@
 package domain
 
+import "time"
+
 type User struct {
 	ID       string `json:"id" bson:"_id"`
 	Name     string `json:"name"`
@@ -17,12 +19,12 @@ type UserRepository interface {
 type Cryptography interface {
   Hasher(plaintext string) (string, error)
   HashComparer(plaintext, hash string) bool
-  Encrypt(plaintext string) (string, error)
+  Encrypt(plaintext string, expirationTime time.Time) (string, time.Time, error)
 }
 
 type UserUseCases interface {
 	GetAll() ([]*User, error)
 	GetByID(id string) (*User, error)
 	Create(user *User) error
-  Login(email, password string) (string, error)
+  Login(email, password string) (string, time.Time, error)
 }

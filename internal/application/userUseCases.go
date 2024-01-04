@@ -2,6 +2,7 @@ package application
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/joaovds/auth-jwt/internal/domain"
 	"github.com/joaovds/auth-jwt/internal/infra/cryptography"
@@ -62,20 +63,22 @@ func (u *UserUseCases) Create(user *domain.User) error {
   return nil
 }
 
-func (u *UserUseCases) Login(email, password string) (string ,error) {
+func (u *UserUseCases) Login(email, password string) (string, time.Time, error) {
   user, err := u.UserRepository.GetByEmail(email)
   if err != nil {
-    return "", err
+    return "", time.Now(), err
   }
 
   if !u.Hasher.HashComparer(password, user.Password) {
-    return "", fmt.Errorf("invalid password")
+    return "", time.Now(), fmt.Errorf("invalid password")
   }
 
-  token, err := u.Hasher.Encrypt(user.ID)
+  expirationTime := time.Now().Add(5 * time.Minute) // 5 minutes
+
+  token, expirationTime, err := u.Hasher.Encrypt(user.ID, expirationTime)
   if err != nil {
-    return "", err
+    return "", time.Now(), err
   }
 
-  return token, nil
+  return token, expirationTime, nil
 }

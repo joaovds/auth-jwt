@@ -106,9 +106,17 @@ func (h *handler) Login(ctx *fiber.Ctx) error {
     return ctx.Status(fiber.StatusBadRequest).JSON("password is required")
   }
 
-  token, err := h.userService.Login(credentials.Email, credentials.Password)
+  token, expirationTime, err := h.userService.Login(credentials.Email, credentials.Password)
   if err != nil {
     return ctx.Status(fiber.StatusInternalServerError).JSON(err.Error())
   }
+
+  ctx.Cookie(&fiber.Cookie{
+    Name: "token",
+    Value: token,
+    Expires: expirationTime,
+    HTTPOnly: true,
+  })
+
   return ctx.Status(fiber.StatusOK).JSON(token)
 }
