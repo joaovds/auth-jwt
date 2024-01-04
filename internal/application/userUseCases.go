@@ -29,6 +29,10 @@ func (u *UserUseCases) GetAll() ([]*domain.User, error) {
 		return nil, err
 	}
 
+  for _, user := range users {
+    user.Password = ""
+  }
+
 	return users, nil
 }
 
@@ -37,6 +41,8 @@ func (u *UserUseCases) GetByID(id string) (*domain.User, error) {
 	if err != nil {
 		return nil, err
 	}
+
+  user.Password = ""
 
 	return user, nil
 }

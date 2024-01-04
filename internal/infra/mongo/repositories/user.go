@@ -110,3 +110,4 @@ func (ur *UserRepository) Create(user *domain.User) error {
 
 	return nil
 }
+
